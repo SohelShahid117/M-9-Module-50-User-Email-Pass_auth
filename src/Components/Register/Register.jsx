@@ -1,10 +1,13 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import auth from "../../Firebase/Firebase.config";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
   const [registerErr, setRegisterErr] = useState("");
   const [success, setSuccess] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const handleRegister = (e) => {
     e.preventDefault();
     console.log("handleRegister is working");
@@ -14,6 +17,8 @@ const Register = () => {
     console.log(password);
     if (password.length < 6) {
       return setRegisterErr("password should be >=6 character");
+    } else if (!/[A-Z]/.test(password)) {
+      return setRegisterErr("at least one uppercase character");
     }
     setRegisterErr("");
     setSuccess("");
@@ -99,7 +104,20 @@ const Register = () => {
               clipRule="evenodd"
             />
           </svg>
-          <input type="password" className="grow" name="password" />
+          {/* <input type="password" className="grow" name="password" /> */}
+          <input
+            type={showPassword ? "text" : "password"}
+            className="grow"
+            name="password"
+          />
+          <button
+            onClick={() => {
+              setShowPassword(!showPassword);
+            }}
+          >
+            {/* Show */}
+            {showPassword ? <FaEye /> : <FaEyeSlash />}
+          </button>
         </label>
         <input
           type="submit"
