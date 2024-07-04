@@ -1,4 +1,8 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  updateProfile,
+} from "firebase/auth";
 import React, { useState } from "react";
 import auth from "../../Firebase/Firebase.config";
 import { FaEye } from "react-icons/fa";
@@ -16,6 +20,8 @@ const Register = () => {
     console.log(email);
     const password = e.target.password.value;
     console.log(password);
+    const name = e.target.username.value;
+    console.log(name);
     const checked = e.target.terms.checked;
     console.log(checked);
     if (password.length < 6) {
@@ -34,6 +40,23 @@ const Register = () => {
         // ...
         console.log(result.user);
         setSuccess("registration success.");
+        updateProfile(auth.currentUser, {
+          displayName: name,
+          photoURL: "https://example.com/jane-q-user/profile.jpg",
+        })
+          .then(() => {
+            // Profile updated!
+            // ...
+          })
+          .catch((error) => {
+            // An error occurred
+            // ...
+          });
+        sendEmailVerification(auth.currentUser).then(() => {
+          // Email verification sent!
+          // ...
+          alert("check your email");
+        });
       })
       .catch((error) => {
         const errorCode = error.code;
