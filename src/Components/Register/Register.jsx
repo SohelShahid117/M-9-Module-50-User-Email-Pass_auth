@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import auth from "../../Firebase/Firebase.config";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const [registerErr, setRegisterErr] = useState("");
@@ -15,10 +16,14 @@ const Register = () => {
     console.log(email);
     const password = e.target.password.value;
     console.log(password);
+    const checked = e.target.terms.checked;
+    console.log(checked);
     if (password.length < 6) {
       return setRegisterErr("password should be >=6 character");
     } else if (!/[A-Z]/.test(password)) {
       return setRegisterErr("at least one uppercase character");
+    } else if (!checked) {
+      return setRegisterErr("accept our terms & conditions");
     }
     setRegisterErr("");
     setSuccess("");
@@ -119,12 +124,17 @@ const Register = () => {
             {showPassword ? <FaEye /> : <FaEyeSlash />}
           </button>
         </label>
+        <input type="checkbox" name="terms" id="" />
+        <label htmlFor="terms">Accept our terms & conditions</label> <br />
         <input
           type="submit"
           value="Submit Register"
           className="btn btn-primary"
         />
       </form>
+      <p>
+        already have an account ? go to <Link to="/login">Login</Link>{" "}
+      </p>
       {registerErr && <h2 className="text-red-700">{registerErr}</h2>}
       {success && <h1 className="text-green-600">{success}</h1>}
     </div>
